@@ -1,18 +1,44 @@
 from django.contrib import admin
-from .models import College, Program, Organization, Student, OrgMember
+from .models import (
+    College,
+    Program,
+    Organization,
+    Student,
+    OrgMember,
+    FireIncident,
+    FireLocation,
+    FireStation,
+)
 
+# Register your models here.
 admin.site.register(College)
 admin.site.register(Program)
 admin.site.register(Organization)
 
+
+# admin.site.register(Student)
 @admin.register(Student)
-class StudentAdmin (admin.ModelAdmin):
+class StudentAdmin(admin.ModelAdmin):
     list_display = ("student_id", "lastname", "firstname", "middlename", "program")
-    search_fields = ("lastname", "firstname",)
+    search_fields = (
+        "lastname",
+        "firstname",
+    )
+
+
+# admin.site.register(OrgMember)
 @admin.register(OrgMember)
-class OrgMemberAdmin (admin.ModelAdmin):
-    list_display = ("student", "get_member_program", "organization", "date_joined",)
-    search_fields = ("student_lastname", "student_firstname",)
+class OrgMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "student",
+        "get_member_program",
+        "organization",
+        "date_joined",
+    )
+    search_fields = (
+        "student__lastname",
+        "student__firstname",
+    )
 
     def get_member_program(self, obj):
         try:
@@ -21,3 +47,11 @@ class OrgMemberAdmin (admin.ModelAdmin):
         except Student.DoesNotExist:
             return None
 
+
+@admin.register(FireStation)
+class FireStationAdmin(admin.ModelAdmin):
+    list_display = ("name", "latitude", "longitude", "address", "location")
+
+
+admin.site.register(FireIncident)
+admin.site.register(FireLocation)
